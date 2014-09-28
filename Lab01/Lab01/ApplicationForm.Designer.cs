@@ -38,6 +38,7 @@
             this.groupBoxTests = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.buttonTest = new System.Windows.Forms.Button();
             this.groupBoxScheme.SuspendLayout();
             this.groupBoxTests.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +47,7 @@
             // 
             this.groupBoxScheme.BackgroundImage = global::Lab01.Properties.Resources.Variant_21;
             this.groupBoxScheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.groupBoxScheme.Controls.Add(this.buttonTest);
             this.groupBoxScheme.Controls.Add(this.comboBox6);
             this.groupBoxScheme.Controls.Add(this.comboBox5);
             this.groupBoxScheme.Controls.Add(this.comboBox4);
@@ -141,6 +143,16 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
+            // buttonTest
+            // 
+            this.buttonTest.Location = new System.Drawing.Point(556, 427);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(89, 31);
+            this.buttonTest.TabIndex = 6;
+            this.buttonTest.Text = "Test";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.ButtonTestClick);
+            // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,6 +182,7 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Button buttonTest;
 
 
     }
