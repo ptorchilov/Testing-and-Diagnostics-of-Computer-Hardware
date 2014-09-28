@@ -66,6 +66,7 @@
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(44, 21);
             this.comboBox6.TabIndex = 5;
+            this.comboBox6.SelectionChangeCommitted += new System.EventHandler(this.Selected6ValueChanged);
             // 
             // comboBox5
             // 
@@ -74,6 +75,7 @@
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(43, 21);
             this.comboBox5.TabIndex = 4;
+            this.comboBox5.SelectionChangeCommitted += new System.EventHandler(this.Selected5ValueChanged);
             // 
             // comboBox4
             // 
@@ -82,6 +84,7 @@
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(41, 21);
             this.comboBox4.TabIndex = 3;
+            this.comboBox4.SelectionChangeCommitted += new System.EventHandler(this.Selected4ValueChanged);
             // 
             // comboBox3
             // 
@@ -90,6 +93,7 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(40, 21);
             this.comboBox3.TabIndex = 2;
+            this.comboBox3.SelectionChangeCommitted += new System.EventHandler(this.Selected3ValueChanged);
             // 
             // comboBox2
             // 
@@ -98,6 +102,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(40, 21);
             this.comboBox2.TabIndex = 1;
+            this.comboBox2.SelectionChangeCommitted += new System.EventHandler(this.Selected2ValueChanged);
             // 
             // comboBox1
             // 
@@ -106,7 +111,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(40, 21);
             this.comboBox1.TabIndex = 0;
-            this.comboBox1.SelectedValueChanged += new System.EventHandler(this.SelectValue1Changed);
+            this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.SelectValue1Changed);
             // 
             // groupBoxTests
             // 
