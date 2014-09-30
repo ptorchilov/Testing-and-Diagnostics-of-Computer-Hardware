@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationForm));
             this.groupBoxScheme = new System.Windows.Forms.GroupBox();
+            this.buttonTest = new System.Windows.Forms.Button();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
@@ -37,15 +39,14 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBoxTests = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.buttonTest = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBoxScheme.SuspendLayout();
             this.groupBoxTests.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxScheme
             // 
-            this.groupBoxScheme.BackgroundImage = global::Lab01.Properties.Resources.Variant_21;
+            this.groupBoxScheme.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("groupBoxScheme.BackgroundImage")));
             this.groupBoxScheme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.groupBoxScheme.Controls.Add(this.buttonTest);
             this.groupBoxScheme.Controls.Add(this.comboBox6);
@@ -54,12 +55,22 @@
             this.groupBoxScheme.Controls.Add(this.comboBox3);
             this.groupBoxScheme.Controls.Add(this.comboBox2);
             this.groupBoxScheme.Controls.Add(this.comboBox1);
-            this.groupBoxScheme.Location = new System.Drawing.Point(334, 12);
+            this.groupBoxScheme.Location = new System.Drawing.Point(167, 12);
             this.groupBoxScheme.Name = "groupBoxScheme";
             this.groupBoxScheme.Size = new System.Drawing.Size(663, 478);
             this.groupBoxScheme.TabIndex = 0;
             this.groupBoxScheme.TabStop = false;
             this.groupBoxScheme.Text = "Scheme";
+            // 
+            // buttonTest
+            // 
+            this.buttonTest.Location = new System.Drawing.Point(556, 427);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(89, 31);
+            this.buttonTest.TabIndex = 6;
+            this.buttonTest.Text = "Test";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.ButtonTestClick);
             // 
             // comboBox6
             // 
@@ -117,11 +128,11 @@
             // 
             // groupBoxTests
             // 
+            this.groupBoxTests.Controls.Add(this.listBox1);
             this.groupBoxTests.Controls.Add(this.label1);
-            this.groupBoxTests.Controls.Add(this.listView1);
-            this.groupBoxTests.Location = new System.Drawing.Point(13, 13);
+            this.groupBoxTests.Location = new System.Drawing.Point(12, 13);
             this.groupBoxTests.Name = "groupBoxTests";
-            this.groupBoxTests.Size = new System.Drawing.Size(315, 477);
+            this.groupBoxTests.Size = new System.Drawing.Size(149, 477);
             this.groupBoxTests.TabIndex = 1;
             this.groupBoxTests.TabStop = false;
             this.groupBoxTests.Text = "Tests";
@@ -135,30 +146,20 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "X1 X2 X3 X4 X5 X6 X7";
             // 
-            // listView1
+            // listBox1
             // 
-            this.listView1.Location = new System.Drawing.Point(7, 31);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(302, 440);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
-            // buttonTest
-            // 
-            this.buttonTest.Location = new System.Drawing.Point(556, 427);
-            this.buttonTest.Name = "buttonTest";
-            this.buttonTest.Size = new System.Drawing.Size(89, 31);
-            this.buttonTest.TabIndex = 6;
-            this.buttonTest.Text = "Test";
-            this.buttonTest.UseVisualStyleBackColor = true;
-            this.buttonTest.Click += new System.EventHandler(this.ButtonTestClick);
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(14, 33);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(123, 433);
+            this.listBox1.TabIndex = 2;
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1009, 502);
+            this.ClientSize = new System.Drawing.Size(842, 502);
             this.Controls.Add(this.groupBoxTests);
             this.Controls.Add(this.groupBoxScheme);
             this.Name = "ApplicationForm";
@@ -181,8 +182,8 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Button buttonTest;
+        private System.Windows.Forms.ListBox listBox1;
 
 
     }
