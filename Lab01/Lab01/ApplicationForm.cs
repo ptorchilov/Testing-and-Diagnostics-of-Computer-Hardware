@@ -139,7 +139,7 @@
                 var inputs = new BitArray(new[] { i }) { Length = InputsNumber };
 
                 var correctFunc = CalculateFunction(inputs);
-                var realFunc = this.CalculateFunction(inputs, faultNumber, faultType);
+                var realFunc = CalculateFunction(inputs, faultNumber, faultType);
 
                 if (correctFunc == realFunc)
                 {
