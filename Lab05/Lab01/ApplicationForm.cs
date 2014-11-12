@@ -139,6 +139,7 @@
         private void ButtonSaClick(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
+            listBox2.Items.Clear();
 
             var startLFSR = new BitArray(new[] { 1 }) { Length = InputsNumber };
 
@@ -168,6 +169,14 @@
                         if (Analyze(correctSequence, realSequence, polinom))
                         {
                             notCoveredFaultsNumber++;
+
+                            var analyzer = new SignatureAnalyzer();
+
+                            var polinomString = analyzer.GetPolunomString(polinom);
+
+                            listBox2.Items.Add(polinomString + " --- " + 
+                                (faultNumber + 1) + " вход" + " --- " +
+                                "=" + faultType);
                         }
                     }
                 }

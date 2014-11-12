@@ -43,6 +43,7 @@
             this.Polinom = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Persentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Xors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.groupBoxTests.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -135,6 +136,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.listBox2);
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Location = new System.Drawing.Point(1048, 13);
             this.groupBox1.Name = "groupBox1";
@@ -155,7 +157,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(6, 16);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(272, 450);
+            this.dataGridView1.Size = new System.Drawing.Size(272, 252);
             this.dataGridView1.TabIndex = 12;
             // 
             // Polinom
@@ -178,6 +180,14 @@
             this.Xors.Name = "Xors";
             this.Xors.ReadOnly = true;
             this.Xors.Width = 31;
+            // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Location = new System.Drawing.Point(7, 275);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(271, 186);
+            this.listBox2.TabIndex = 13;
             // 
             // ApplicationForm
             // 
@@ -220,6 +230,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Polinom;
         private System.Windows.Forms.DataGridViewTextBoxColumn Persentage;
         private System.Windows.Forms.DataGridViewTextBoxColumn Xors;
+        private System.Windows.Forms.ListBox listBox2;
 
 
     }
