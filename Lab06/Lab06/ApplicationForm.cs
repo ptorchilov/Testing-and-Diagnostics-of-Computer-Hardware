@@ -33,7 +33,7 @@ namespace Lab06
 
             var combinator = new Combinator(sequence);
 
-            var combinations = combinator.GetCombinations(0, 5);
+            var combinations = combinator.GetCombinations(0, 2);
 
             var i = 0;
 

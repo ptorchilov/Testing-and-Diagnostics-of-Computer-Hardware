@@ -75,8 +75,14 @@
             foreach (var combination in combinations)
             {
                 var indeces = combination.Split(' ');
+                var combinationsInt = new int[indeces.Length];
 
-                result.Add(new List<int>(new[] { Int32.Parse(indeces[0]), Int32.Parse(indeces[1]) }));
+                for (var i = 0; i < indeces.Length; i++)
+                {
+                    combinationsInt[i] = Int32.Parse(indeces[i]);
+                }
+
+                result.Add(new List<int>(combinationsInt));
             }
 
             return result;
