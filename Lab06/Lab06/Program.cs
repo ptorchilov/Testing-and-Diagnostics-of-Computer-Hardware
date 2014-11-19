@@ -14,7 +14,7 @@
 
         /// <summary>
         /// The sequence size
-        /// </summary>
+        /// </summary>W
         private const int SequenceSize = 48;
 
         /// <summary>
@@ -151,11 +151,11 @@
         {
             if (Utilities.ComapareSignatures(firstSignature, secondSignature))
             {
-                Console.WriteLine("Signatures are equals: " + Utilities.ToBitString(firstSignature));
+                Console.WriteLine("Signatures are equal: " + Utilities.ToBitString(firstSignature));
             }
             else
             {
-                Console.WriteLine("Signatures are not equals: " + Utilities.ToBitString(firstSignature) +
+                Console.WriteLine("Signatures are not equal: " + Utilities.ToBitString(firstSignature) +
                                   " and " + Utilities.ToBitString(secondSignature));
             }
 

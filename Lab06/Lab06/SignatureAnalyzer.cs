@@ -20,6 +20,8 @@
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SignatureAnalyzer" /> class.
         /// </summary>
@@ -34,7 +36,9 @@
                 firstRow[j] = matrix[0, j];
                 secondRow[j] = matrix[1, j];
             }
-        }
+        } 
+
+        #endregion
 
         #region Public Methods
 
