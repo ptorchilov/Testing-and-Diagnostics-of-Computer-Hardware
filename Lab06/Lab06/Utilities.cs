@@ -7,6 +7,8 @@
     /// </summary>
     public static class Utilities
     {
+        #region Sequence generator
+
         /// <summary>
         /// Genarates the random sequence.
         /// </summary>
@@ -23,7 +25,11 @@
             }
 
             return resultSequence;
-        }
+        } 
+
+        #endregion
+
+        #region Console Output
 
         /// <summary>
         /// Shows the message.
@@ -44,6 +50,8 @@
             {
                 Console.Write(bit + " ");
             }
-        }
+        } 
+
+        #endregion
     }
 }
