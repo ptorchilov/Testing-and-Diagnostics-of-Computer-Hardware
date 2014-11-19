@@ -1,6 +1,9 @@
 ﻿namespace Lab06
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Text;
 
     /// <summary>
     /// Main class.
@@ -17,7 +20,7 @@
         /// <summary>
         /// The polinom
         /// </summary>
-        private static readonly int[] Polinom = { 0, 0, 0, 1, 1, 1, 0, 1 }; 
+        private static readonly int[] Polinom = {0, 0, 0, 1, 1, 1, 0, 1};
 
         #endregion
 
@@ -33,16 +36,131 @@
 
             var sequence = CreateRandomSequence(SequenceSize);
 
-            var combinator = new Combinator(sequence);
+            var correctSignatureSingle = GetSignature(sequence, SignatureAnalyzerType.SingleChannel, matrix);
 
-            var combinations = combinator.GetCombinations(0, 2);
+            var correctSignatureDual = GetSignature(sequence, SignatureAnalyzerType.DualChannel, matrix);
 
-            var i = 0;
-        } 
+            CompareSignatures(correctSignatureSingle, correctSignatureDual);
+
+            for (var i = 2; i < 5; i++)
+            {
+                var combinations = GetCombinations(sequence, 0, i);
+
+                var singlePercents = TestSignatureAnalyzer(sequence, combinations, matrix, correctSignatureSingle,
+                    SignatureAnalyzerType.SingleChannel);
+
+                ShowPercentages(singlePercents, SignatureAnalyzerType.SingleChannel, i);
+
+                var dualPercents = TestSignatureAnalyzer(sequence, combinations, matrix, correctSignatureDual,
+                    SignatureAnalyzerType.DualChannel);
+
+                ShowPercentages(dualPercents, SignatureAnalyzerType.DualChannel, i);
+            }
+
+            Console.ReadKey();
+        }
 
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Shows the percentages.
+        /// </summary>
+        /// <param name="percents">The percents.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="combination">The combination.</param>
+        private static void ShowPercentages(double percents, SignatureAnalyzerType type, int combination)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("Number of ").Append(combination).Append(" time errors for ");
+
+            sb.Append(type == SignatureAnalyzerType.SingleChannel ? "Single" : "Dual");
+
+            sb.Append(" channel analyzer = ").AppendFormat("{0:0.00}", percents).Append("%");
+
+            Console.WriteLine(sb.ToString());
+        }
+
+        /// <summary>
+        /// Gets the correct signature.
+        /// </summary>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <returns></returns>
+        private static BitArray GetSignature(int[] sequence, SignatureAnalyzerType type, Matrix matrix)
+        {
+            var analyzer = new SignatureAnalyzer(matrix);
+
+            var sequenceBitArray = Utilities.ConvertSequenceToBitArray(sequence);
+
+            return analyzer.Compress(sequenceBitArray, type);
+        }
+
+        /// <summary>
+        /// Tests the signature analyzer.
+        /// </summary>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="combinations">The combinations.</param>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="correctSignature">The correct signature.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        private static double TestSignatureAnalyzer(int[] sequence, List<List<int>> combinations, Matrix matrix,
+            BitArray correctSignature, SignatureAnalyzerType type)
+        {
+            var errorCounter = 0;
+
+            for (var i = 0; i < combinations.Count; i++)
+            {
+                for (var j = 0; j < combinations[i].Count; j++)
+                {
+                    sequence = Utilities.NotOperation(sequence, combinations[i][j]);
+                }
+
+                var realSignature = GetSignature(sequence, type, matrix);
+
+                if (!Utilities.ComapareSignatures(correctSignature, realSignature))
+                {
+                    errorCounter++;
+                }
+            }
+
+            return GetPercents(combinations.Count, errorCounter);
+        }
+
+        /// <summary>
+        /// Gets the percents of errors.
+        /// </summary>
+        /// <param name="combinations">The combinations.</param>
+        /// <param name="errors">The errors.</param>
+        /// <returns></returns>
+        private static double GetPercents(int combinations, int errors)
+        {
+            return ((double) errors/combinations)*100;
+        }
+
+        /// <summary>
+        /// Compares the signatures.
+        /// </summary>
+        /// <param name="firstSignature">The first signature.</param>
+        /// <param name="secondSignature">The second signature.</param>
+        public static void CompareSignatures(BitArray firstSignature, BitArray secondSignature)
+        {
+            if (Utilities.ComapareSignatures(firstSignature, secondSignature))
+            {
+                Console.WriteLine("Signatures are equals: " + Utilities.ToBitString(firstSignature));
+            }
+            else
+            {
+                Console.WriteLine("Signatures are not equals: " + Utilities.ToBitString(firstSignature) +
+                                  " and " + Utilities.ToBitString(secondSignature));
+            }
+
+            Console.WriteLine();
+        }
 
         /// <summary>
         /// Creates the signature analyzers.
@@ -78,7 +196,21 @@
             Utilities.ShowSequence(sequence);
 
             return sequence;
-        } 
+        }
+
+        /// <summary>
+        /// Gets the combinations.
+        /// </summary>
+        /// <param name="sequence">The sequence.</param>
+        /// <param name="start">The start.</param>
+        /// <param name="level">The level.</param>
+        /// <returns></returns>
+        private static List<List<int>> GetCombinations(int[] sequence, int start, int level)
+        {
+            var combinator = new Combinator(sequence);
+
+            return combinator.GetCombinations(start, level);
+        }
 
         #endregion
     }
