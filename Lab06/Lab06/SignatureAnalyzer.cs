@@ -120,7 +120,7 @@
                 signature[1] = GetXorBit(secondRow, temp, outputs[i]);
                 signature[0] = GetXorBit(firstRow, temp, outputs[i + 1]);
 
-                if (firstRow[0] == 1)
+                if (secondRow[0] == 1)
                 {
                     signature[0] ^= outputs[i];
                 }
