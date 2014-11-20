@@ -37,12 +37,12 @@
             var sequence = CreateRandomSequence(SequenceSize);
 
             var correctSignatureSingle = GetSignature(sequence, SignatureAnalyzerType.SingleChannel, matrix);
-
+            Console.WriteLine();
             var correctSignatureDual = GetSignature(sequence, SignatureAnalyzerType.DualChannel, matrix);
 
             CompareSignatures(correctSignatureSingle, correctSignatureDual);
 
-            for (var i = 2; i < 5; i++)
+            for (var i = 1; i < 5; i++)
             {
                 var combinations = GetCombinations(sequence, 0, i);
 
@@ -56,8 +56,6 @@
 
                 ShowPercentages(dualPercents, SignatureAnalyzerType.DualChannel, i);
             }
-
-            Console.ReadKey();
         }
 
         #endregion
@@ -115,12 +113,16 @@
 
             for (var i = 0; i < combinations.Count; i++)
             {
+                var errorSequence = new int[sequence.Length];
+
+                Array.Copy(sequence, errorSequence, sequence.Length);
+
                 for (var j = 0; j < combinations[i].Count; j++)
                 {
-                    sequence = Utilities.NotOperation(sequence, combinations[i][j]);
+                    errorSequence = Utilities.NotOperation(errorSequence, combinations[i][j]);
                 }
 
-                var realSignature = GetSignature(sequence, type, matrix);
+                var realSignature = GetSignature(errorSequence, type, matrix);
 
                 if (!Utilities.ComapareSignatures(correctSignature, realSignature))
                 {

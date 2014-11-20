@@ -82,16 +82,20 @@
         /// <returns></returns>
         public static int[] NotOperation(int[] sequence, int index)
         {
+            var result = new int[sequence.Length];
+
+            Array.Copy(sequence, result, sequence.Length);
+
             if (sequence[index] == 1)
             {
-                sequence[index] = 0;
+                result[index] = 0;
             }
             else
             {
-                sequence[index] = 1;
+                result[index] = 1;
             }
 
-            return sequence;
+            return result;
         }
 
         #endregion

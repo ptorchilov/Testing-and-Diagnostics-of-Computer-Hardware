@@ -1,5 +1,6 @@
 ﻿namespace Lab06
 {
+    using System;
     using System.Collections;
 
     /// <summary>
@@ -50,7 +51,7 @@
         /// <returns></returns>
         public BitArray Compress(BitArray outputs, SignatureAnalyzerType type)
         {
-            var signature = new BitArray(new[] {1}) {Length = PolinomSize};
+            var signature = new BitArray(new[] {0}) {Length = PolinomSize};
 
             switch (type)
             {
@@ -83,14 +84,16 @@
         {
             for (var i = 0; i < outputs.Length; i++)
             {
-                signature[7] = signature[6];
-                signature[6] = signature[5];
-                signature[5] = signature[4];
-                signature[4] = signature[3];
-                signature[3] = signature[2];
-                signature[2] = signature[1];
-                signature[1] = signature[0];
-                signature[0] = GetXorBit(secondRow, signature, outputs[i]);
+                var temp = new BitArray(signature);
+
+                signature[7] = temp[6];
+                signature[6] = temp[5];
+                signature[5] = temp[4];
+                signature[4] = temp[3];
+                signature[3] = temp[2];
+                signature[2] = temp[1];
+                signature[1] = temp[0];
+                signature[0] = GetXorBit(secondRow, temp, outputs[i]);
             }
 
             return signature;
@@ -106,14 +109,21 @@
         {
             for (var i = 0; i < outputs.Length; i += 2)
             {
-                signature[7] = signature[5];
-                signature[6] = signature[4];
-                signature[5] = signature[3];
-                signature[4] = signature[2];
-                signature[3] = signature[1];
-                signature[2] = signature[0];
-                signature[1] = GetXorBit(secondRow, signature, outputs[i]);
-                signature[0] = GetXorBit(firstRow, signature, outputs[i]);
+                var temp = new BitArray(signature);
+
+                signature[7] = temp[5];
+                signature[6] = temp[4];
+                signature[5] = temp[3];
+                signature[4] = temp[2];
+                signature[3] = temp[1];
+                signature[2] = temp[0];
+                signature[1] = GetXorBit(secondRow, temp, outputs[i]);
+                signature[0] = GetXorBit(firstRow, temp, outputs[i + 1]);
+
+                if (firstRow[0] == 1)
+                {
+                    signature[0] ^= outputs[i];
+                }
             }
 
             return signature;
