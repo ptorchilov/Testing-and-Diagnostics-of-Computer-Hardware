@@ -129,6 +129,13 @@
             return signature;
         }
 
+        /// <summary>
+        /// Gets the xor bit.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="signature">The signature.</param>
+        /// <param name="output">if set to <c>true</c> [output].</param>
+        /// <returns></returns>
         private bool GetXorBit(int[] row, BitArray signature, bool output)
         {
             var resultBit = output;

@@ -141,7 +141,7 @@
         /// <returns></returns>
         private static double GetPercents(int combinations, int errors)
         {
-            return ((double) errors/combinations)*100;
+            return ((double) errors / combinations) * 100;
         }
 
         /// <summary>
