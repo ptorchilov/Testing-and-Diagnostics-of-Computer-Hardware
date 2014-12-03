@@ -8,9 +8,13 @@
 
         public static void Main(String[] args)
         {
-            var memory = new Memory(MemorySize, MemorySize);
+//            var memory = new Memory(MemorySize, MemorySize);
+//
+//            Memory.ShowMemoryState(memory);
 
-            Memory.ShowMemoryState(memory);
+            var errors = Utilities.GetRandomErrors(32, MemorySize);
+
+            var i = 0;
         }
     }
 }
