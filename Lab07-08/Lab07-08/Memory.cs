@@ -96,6 +96,24 @@
             Console.WriteLine(sb.ToString());
         }
 
+        /// <summary>
+        /// Initializes the memory.
+        /// </summary>
+        /// <param name="memory">The memory.</param>
+        /// <param name="value">The value.</param>
+        public static Memory InitMemory(Memory memory, int value)
+        {
+            for (var i = 0; i < memory.Width; i++)
+            {
+                for (var j = 0; j < memory.Width; j++)
+                {
+                    memory[i, j] = value;
+                }
+            }
+
+            return memory;
+        }
+
         #endregion
     }
 }

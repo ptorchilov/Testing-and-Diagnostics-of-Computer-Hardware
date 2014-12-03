@@ -10,14 +10,16 @@
         private List<List<int>> Faults { get; set; }
 
         private List<List<int>> CoveredFaults { get; set; }
-        
+
+        private const int Condition = 10;
+
         public Walking_0_1(List<List<int>> faults)
         {
             Faults = faults;
             CoveredFaults = new List<List<int>>(faults.Count);
         }
 
-        public List<List<int>> Test(Memory memory, Faults faultType, AFFaults mode = AFFaults.SellNotAvailable)
+        public List<List<int>> Test(Memory memory, Faults faultType, FaultsMode mode = FaultsMode.SellNotAvailable)
         {
             CoveredFaults.Clear();
 
@@ -32,7 +34,7 @@
             return CoveredFaults;
         }
 
-        private void MakeTest(Memory memory, int i, int j, Faults faultType, AFFaults mode)
+        private void MakeTest(Memory memory, int i, int j, Faults faultType, FaultsMode mode)
         {
             //1. Read base
             var baseSell = ReadSingle(memory, i, j);
@@ -72,7 +74,7 @@
             return -1;
         }
 
-        private void WriteAll(Memory memory, int baseI, int baseJ, int value, Faults faultType, AFFaults mode = AFFaults.SellNotAvailable)
+        private void WriteAll(Memory memory, int baseI, int baseJ, int value, Faults faultType, FaultsMode mode = FaultsMode.SellNotAvailable)
         {
             for (var i = 0; i < memory.Width; i++)
             {
@@ -93,8 +95,243 @@
 
                             break;
                         }
+                        case Lab07_08.Faults.CFin:
+                        {
+                            WriteCfin(memory, baseI, baseJ, value, i, j, mode);
+
+                            break;
+                        }
+                        case Lab07_08.Faults.CFid:
+                        {
+                            WriteCfid(memory, baseI, baseJ, value, i, j, mode);
+
+                            break;
+                        }
                     }
                     
+                }
+            }
+        }
+
+        private void WriteCfid(Memory memory, int baseI, int baseJ, int value, int i, int j, FaultsMode mode)
+        {
+            if (!(i == baseI && j == baseJ))
+            {
+                switch (mode)
+                {
+                    case FaultsMode.UpZeroToOneConst0:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j + Condition] = 0;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.UpZeroToOneConst1:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j + Condition] = 1;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.UpOneToZeroConst0:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j + Condition] = 0;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.UpOneToZeroConst1:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j + Condition] = 1;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownZeroToOneConst0:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j - Condition] = 0;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownZeroToOneConst1:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j - Condition] = 1;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownOneToZeroConst0:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j - Condition] = 0;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownOneToZeroConst1:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            memory[i, j - Condition] = 1;
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void WriteCfin(Memory memory, int baseI, int baseJ, int value, int i, int j, FaultsMode mode)
+        {
+            if (!(i == baseI && j == baseJ))
+            {
+                switch (mode)
+                {
+                    case FaultsMode.UpOneToZeroInverse:
+                    {
+                        var sell = ReadSingle(memory, i, j);    
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            var victim = ReadSingle(memory, i, j + Condition);
+
+                            if (victim == 0)
+                            {
+                                memory[i, j + Condition] = 1;    
+                            }
+                            else
+                            {
+                                memory[i, j + Condition] = 0;
+                            }
+                            
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.UpZeroToOneInverse:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            var victim = ReadSingle(memory, i, j - Condition);
+
+                            if (victim == 0)
+                            {
+                                memory[i, j - Condition] = 1;
+                            }
+                            else
+                            {
+                                memory[i, j - Condition] = 0;
+                            }
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownOneToZeroInverse:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 1 && value == 0 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            var victim = ReadSingle(memory, i, j + Condition);
+
+                            if (victim == 0)
+                            {
+                                memory[i, j + Condition] = 1;
+                            }
+                            else
+                            {
+                                memory[i, j + Condition] = 0;
+                            }
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
+
+                    case FaultsMode.DownZeroToOneInverse:
+                    {
+                        var sell = ReadSingle(memory, i, j);
+
+                        if (sell == 0 && value == 1 && GetNumberOfFault(Faults, i, j) != -1)
+                        {
+                            var victim = ReadSingle(memory, i, j - Condition);
+
+                            if (victim == 0)
+                            {
+                                memory[i, j - Condition] = 1;
+                            }
+                            else
+                            {
+                                memory[i, j - Condition] = 0;
+                            }
+                        }
+
+                        memory[i, j] = value;
+
+                        break;
+                    }
                 }
             }
         }
@@ -110,28 +347,17 @@
             }
         }
 
-        private void WriteAf(Memory memory, int baseI, int baseJ, int value, AFFaults mode, int i, int j)
+        private void WriteAf(Memory memory, int baseI, int baseJ, int value, FaultsMode mode, int i, int j)
         {
             if (!(i == baseI && j == baseJ))
             {
                 if (GetNumberOfFault(Faults, i, j) != -1)
                 {
-                    if (mode == AFFaults.SeveralAddress)
+                    if (mode == FaultsMode.SeveralAddress)
                     {
                         memory[i, j] = value;
 
-                        if (i == 0)
-                        {
-                            memory[i + 1, j] = value;
-                        }
-                        else if (j == 0)
-                        {
-                            memory[i, j + 1] = value;
-                        }
-                        else
-                        {
-                            memory[i - 1, j - 1] = value;
-                        }
+                        memory[i, j - 1] = value;
                     }
                 }
                 else
