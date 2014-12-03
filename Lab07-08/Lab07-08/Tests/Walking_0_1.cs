@@ -2,144 +2,169 @@
 {
     using System.Collections.Generic;
     using FaultModels;
+    using Lab07_08;
 
+    // ReSharper disable once InconsistentNaming
     public class Walking_0_1
     {
-        /// <summary>
-        /// The faults
-        /// </summary>
-        private List<List<int>> faults;
+        private List<List<int>> Faults { get; set; }
 
-        private List<bool> coveredFaults;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Walking_0_1"/> class.
-        /// </summary>
-        /// <param name="faults">The faults.</param>
+        private List<List<int>> CoveredFaults { get; set; }
+        
         public Walking_0_1(List<List<int>> faults)
         {
-            this.faults = faults;
-            coveredFaults = new List<bool>(faults.Count);
+            Faults = faults;
+            CoveredFaults = new List<List<int>>(faults.Count);
         }
 
-        /// <summary>
-        /// Tests the af.
-        /// </summary>
-        /// <param name="memory">The memory.</param>
-        /// <param name="mode">The mode.</param>
-        public void TestAF(Memory memory, AFFaults mode)
+        public List<List<int>> Test(Memory memory, Faults faultType, AFFaults mode = AFFaults.SellNotAvailable)
         {
-            var maxErrors = 0;
+            CoveredFaults.Clear();
 
             for (var i = 0; i < memory.Width; i++)
             {
                 for (var j = 0; j < memory.Height; j++)
                 {
-                    MakeAFTest(memory, i, j, mode);
+                    MakeTest(memory, i, j, faultType, mode);
+                }
+            }
+
+            return CoveredFaults;
+        }
+
+        private void MakeTest(Memory memory, int i, int j, Faults faultType, AFFaults mode)
+        {
+            //1. Read base
+            var baseSell = ReadSingle(memory, i, j);
+
+            //2. Write all not base
+            WriteAll(memory, i, j, baseSell == 0 ? 1 : 0, faultType, mode);
+
+            //3. Read all
+            ReadAll(memory, i, j, baseSell == 0 ? 1 : 0);
+
+            //4. Read base
+            var newBaseSell = ReadSingle(memory, i, j);
+
+            if (baseSell != newBaseSell)
+            {
+                if (GetNumberOfFault(CoveredFaults, i, j) == -1)
+                {
+                    var fault = new List<int> {i, j};
+
+                    CoveredFaults.Add(fault);
                 }
             }
         }
 
-        private void MakeAFTest(Memory memory, int i, int j, AFFaults mode)
+        private int GetNumberOfFault(List<List<int>> faultsList, int i, int j)
         {
-            switch (mode)
+            for (var k = 0; k < faultsList.Count; k++)
             {
-                case AFFaults.SellNotAvailable:
+                var item = faultsList[k];
+
+                if (item[0] == i && item[1] == j)
                 {
-                    //1. Read base
-                    var baseSell = ReadSingle(memory, i, j);
-
-                    if (baseSell == -1)
-                    {
-                        var faultNumber = GetNumberOfFault(i, j);
-
-                        coveredFaults[faultNumber] = true;
-                        return;
-                    }
-
-                    //2. Write all not base
-                    WriteAll(memory, i, j, baseSell == 0 ? 1 : 0);
-
-                    //3. Read all
-                    ReadAll(memory, i, j, baseSell == 0 ? 1 : 0);
-
-                    //4. Read base
-                    var newBaseSell = ReadSingle(memory, i, j);
-
-                    if (baseSell != newBaseSell)
-                    {
-                        var faultNumber = GetNumberOfFault(i, j);
-
-                        coveredFaults[faultNumber] = true;
-                    }
-
-                    break;
+                    return k;
                 }
+            }
 
+            return -1;
+        }
+
+        private void WriteAll(Memory memory, int baseI, int baseJ, int value, Faults faultType, AFFaults mode = AFFaults.SellNotAvailable)
+        {
+            for (var i = 0; i < memory.Width; i++)
+            {
+                for (var j = 0; j < memory.Height; j++)
+                {
+                    switch (faultType)
+                    {
+                        case Lab07_08.Faults.AF:
+                        {
+                            WriteAf(memory, baseI, baseJ, value, mode, i, j);
+
+                            break;
+                        }
+
+                        case Lab07_08.Faults.SAF:
+                        {
+                            WriteSaf(memory, baseI, baseJ, value, i, j);
+
+                            break;
+                        }
+                    }
                     
+                }
             }
-
-            return;
         }
 
-        private int GetNumberOfFault(int i, int j)
+        private void WriteSaf(Memory memory, int baseI, int baseJ, int value, int i, int j)
         {
-            //TODO: Implement this
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Writes the operation.
-        /// </summary>
-        /// <param name="memory">The memory.</param>
-        /// <param name="baseI">The base i.</param>
-        /// <param name="baseJ">The base j.</param>
-        /// <param name="value">The value.</param>
-        private void WriteAll(Memory memory, int baseI, int baseJ, int value)
-        {
-            for (var i = 0; i < memory.Width; i++)
+            if (!(i == baseI && j == baseJ))
             {
-                for (var j = 0; j < memory.Height; j++)
+                if (GetNumberOfFault(Faults, i, j) == -1)
                 {
-                    if (i != baseI && j != baseJ)
+                    memory[i, j] = value;
+                }
+            }
+        }
+
+        private void WriteAf(Memory memory, int baseI, int baseJ, int value, AFFaults mode, int i, int j)
+        {
+            if (!(i == baseI && j == baseJ))
+            {
+                if (GetNumberOfFault(Faults, i, j) != -1)
+                {
+                    if (mode == AFFaults.SeveralAddress)
                     {
                         memory[i, j] = value;
+
+                        if (i == 0)
+                        {
+                            memory[i + 1, j] = value;
+                        }
+                        else if (j == 0)
+                        {
+                            memory[i, j + 1] = value;
+                        }
+                        else
+                        {
+                            memory[i - 1, j - 1] = value;
+                        }
                     }
+                }
+                else
+                {
+                    memory[i, j] = value;
                 }
             }
         }
 
         private int ReadSingle(Memory memory, int i, int j)
         {
-            if (GetNumberOfFault(i, j) == -1)
-            {
-                return memory[i, j];
-            }
-
-            return -1;
+            return memory[i, j];
         }
 
-        /// <summary>
-        /// Reads the operation.
-        /// </summary>
-        /// <param name="memory">The memory.</param>
-        /// <param name="baseI">The base i.</param>
-        /// <param name="baseJ">The base j.</param>
-        /// <param name="correctValue">The correct value.</param>
-        /// <returns></returns>
         private void ReadAll(Memory memory, int baseI, int baseJ, int correctValue)
         {
             for (var i = 0; i < memory.Width; i++)
             {
                 for (var j = 0; j < memory.Height; j++)
                 {
-                    var currentSell = memory[i, j];
-
-                    if (currentSell != correctValue)
+                    if (!(i == baseI && j == baseJ))
                     {
-                        var faultNumber = GetNumberOfFault(i, j);
+                        var currentSell = memory[i, j];
 
-                        coveredFaults[faultNumber] = true;
+                        if (currentSell != correctValue)
+                        {
+                            if (GetNumberOfFault(CoveredFaults, i, j) == -1)
+                            {
+                                var fault = new List<int> {i, j};
+
+                                CoveredFaults.Add(fault);
+                            }
+                        }
                     }
                 }
             }

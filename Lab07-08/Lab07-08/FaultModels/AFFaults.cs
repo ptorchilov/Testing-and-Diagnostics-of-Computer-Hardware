@@ -10,11 +10,6 @@
         /// <summary>
         /// The several writes
         /// </summary>
-        SeveralWrites = 2,
-
-        /// <summary>
-        /// The several addresses
-        /// </summary>
-        SeveralAddresses = 3
+        SeveralAddress = 2,
     }
 }

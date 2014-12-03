@@ -42,12 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FaultModels\AFFaults.cs" />
+    <Compile Include="FaultModels\CFinFaults.cs" />
     <Compile Include="Faults.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tester.cs" />
-    <Compile Include="Tests\Walking_0_1.cs" />	<Compile Include="Utilities.cs" />  </ItemGroup>
+    <Compile Include="Tests\Walking_0_1.cs" />
+    <Compile Include="Utilities.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
