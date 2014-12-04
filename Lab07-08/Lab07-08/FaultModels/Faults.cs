@@ -1,4 +1,4 @@
-﻿namespace Lab07_08
+﻿namespace Lab07_08.FaultModels
 {
     /// <summary>
     /// Enumneration for store fault types.

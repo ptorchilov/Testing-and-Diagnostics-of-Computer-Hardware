@@ -11,7 +11,7 @@
 
         private List<List<int>> CoveredFaults { get; set; }
 
-        private const int Condition = 10;
+        private const int Condition = 2;
 
         public Walking_0_1(List<List<int>> faults)
         {
@@ -82,26 +82,26 @@
                 {
                     switch (faultType)
                     {
-                        case Lab07_08.Faults.AF:
+                        case FaultModels.Faults.AF:
                         {
                             WriteAf(memory, baseI, baseJ, value, mode, i, j);
 
                             break;
                         }
 
-                        case Lab07_08.Faults.SAF:
+                        case FaultModels.Faults.SAF:
                         {
                             WriteSaf(memory, baseI, baseJ, value, i, j);
 
                             break;
                         }
-                        case Lab07_08.Faults.CFin:
+                        case FaultModels.Faults.CFin:
                         {
                             WriteCfin(memory, baseI, baseJ, value, i, j, mode);
 
                             break;
                         }
-                        case Lab07_08.Faults.CFid:
+                        case FaultModels.Faults.CFid:
                         {
                             WriteCfid(memory, baseI, baseJ, value, i, j, mode);
 

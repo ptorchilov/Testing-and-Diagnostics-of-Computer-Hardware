@@ -8,33 +8,41 @@
     /// </summary>
     public class Utilities
     {
-        /// <summary>
-        /// Gets the random errors.
-        /// </summary>
-        /// <param name="count">The count.</param>
-        /// <param name="matrixSize">Size of the matrix.</param>
-        /// <param name="direction">if set to <c>true</c> [direction].</param>
-        /// <param name="condition">The condition.</param>
-        /// <returns></returns>
-        public static List<List<int>> GetRandomErrors(int count, int matrixSize, bool direction = true,
-            int condition = 0)
+        public static List<List<int>> GetRandomErrors(int count, int matrixSize, bool directionJ = true,
+            bool directionI = true, int conditionJ = 0, int conditionI = 0)
         {
             var random = new Random();
             var result = new List<List<int>>(count);
 
             while (result.Count < count)
             {
-                var i = random.Next(matrixSize);
+                int i;
 
-                int j;
-
-                if (direction)
+                if (directionI)
                 {
-                    j = random.Next(condition, matrixSize);
+                    i = random.Next(conditionI, matrixSize - conditionI);
                 }
                 else
                 {
-                    j = random.Next(matrixSize - condition);
+                    i = random.Next(matrixSize - conditionI);
+                }
+
+                int j;
+
+                if (directionJ)
+                {
+                    if (!directionI)
+                    {
+                        j = random.Next(conditionJ, matrixSize);
+                    }
+                    else
+                    {
+                        j = random.Next(conditionJ, matrixSize - conditionJ);
+                    }
+                }
+                else
+                {
+                    j = random.Next(matrixSize - conditionJ);
                 }
             
 

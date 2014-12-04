@@ -21,26 +21,77 @@
         {
             CoveredFaults.Clear();
 
-            //1. Write All 0
-            WriteAll(memory, 0, faultType, true, mode);
+            for (var i = 0; i < memory.Width; i++)
+            {
+                for (var j = 0; j < memory.Height; j++)
+                {
+                    //1. Write 0
+                    WriteAll(memory, 0, i, j, faultType, mode);
+                }
+            }
 
-            //2. Read All Up 0 
-            ReadAll(memory, 0, true);
 
-            //3. Write All Up 1
-            WriteAll(memory, 1, faultType, true, mode);
+            var etalon = 0;
 
-            //4. Read All Down 1
-            ReadAll(memory, 1, false);
+            for (var i = 0; i < memory.Width; i++)
+            {
+                for (var j = 0; j < memory.Height; j++)
+                {
+                    //2. Read Up 0 
+                    var sell = ReadSingle(memory, i, j);
 
-            //5. Write All Down 0
-            WriteAll(memory, 0, faultType, false, mode);
+                    if (sell != etalon)
+                    {
+                        if (GetNumberOfFault(CoveredFaults, i, j) == -1)
+                        {
+                            var fault = new List<int> {i, j};
 
-            //6. Read All Down 0
-            ReadAll(memory, 0, false);
+                            CoveredFaults.Add(fault);
+                        }
+                    }
+                    //3. Write Up 1
+                    WriteAll(memory, 1, i, j, faultType, mode);
+                }
+            }
 
-            //TODO: это должно выполняться польностью на всей памяти на не в каждой итерации
+            for (var i = memory.Width - 1; i >= 0; i--)
+            {
+                for (var j = memory.Height - 1; j >= 0; j--)
+                {
+                    etalon = 1;
+                    //4. Read Down 1
+                    var sell = ReadSingle(memory, i, j);
 
+                    if (sell != etalon)
+                    {
+                        if (GetNumberOfFault(CoveredFaults, i, j) == -1)
+                        {
+                            var fault = new List<int> { i, j };
+
+                            CoveredFaults.Add(fault);
+                        }
+                    }
+
+                    //5. Write Down 0
+                    WriteAll(memory, 0, i, j, faultType, mode);
+
+                    etalon = 0;
+
+                    //6. Read Down 0
+                    sell = ReadSingle(memory, i, j);
+
+                    if (sell != etalon)
+                    {
+                        if (GetNumberOfFault(CoveredFaults, i, j) == -1)
+                        {
+                            var fault = new List<int> { i, j };
+
+                            CoveredFaults.Add(fault);
+                        }
+                    }
+                }
+            }
+            
             return CoveredFaults;
         }
 
@@ -59,84 +110,82 @@
             return -1;
         }
 
-        private void WriteAll(Memory memory, int value, Faults faultType, bool direction,
+        private void WriteAll(Memory memory, int value, int i, int j, Faults faultType,
             FaultsMode mode = FaultsMode.SellNotAvailable)
         {
-            if (direction)
+            switch (faultType)
             {
-                for (var i = 0; i < memory.Width; i++)
+                case FaultModels.Faults.AF:
                 {
-                    for (var j = 0; j < memory.Height; j++)
-                    {
-                        switch (faultType)
-                        {
-                            case Lab07_08.Faults.AF:
-                            {
-                                WriteAf(memory, value, mode, i, j);
+                    WriteAf(memory, value, mode, i, j);
 
-                                break;
-                            }
+                    break;
+                }
 
-                            case Lab07_08.Faults.SAF:
-                            {
-                                WriteSaf(memory, value, i, j);
+                case FaultModels.Faults.SAF:
+                {
+                    WriteSaf(memory, value, i, j);
 
-                                break;
-                            }
-                            case Lab07_08.Faults.CFin:
-                            {
-                                WriteCfin(memory, value, i, j, mode);
+                    break;
+                }
+                case FaultModels.Faults.CFin:
+                {
+                    WriteCfin(memory, value, i, j, mode);
 
-                                break;
-                            }
-                            case Lab07_08.Faults.CFid:
-                            {
-                                WriteCfid(memory, value, i, j, mode);
+                    break;
+                }
+                case FaultModels.Faults.CFid:
+                {
+                    WriteCfid(memory, value, i, j, mode);
 
-                                break;
-                            }
-                        }
-                    }
+                    break;
+                }
+                case FaultModels.Faults.PNPSFK9:
+                {
+                    WritePnpsfk9(memory, value, i, j);
+                    
+                    break;
+                }
+                case FaultModels.Faults.ANPSFK3:
+                {
+                    WriteAnpsfk3(memory, value, i, j);
+
+                    break;
                 }
             }
-            else
+        }
+
+        private void WriteAnpsfk3(Memory memory, int value, int i, int j)
+        {
+            if (GetNumberOfFault(Faults, i, j - 1) != -1)
             {
-                //TODO: здесь могут быть проблемы с адресацией
-                for (var i = memory.Width - 1; i >= 0; i--)
-                {
-                    for (var j = memory.Height - 1; j >= 0; j--)
-                    {
-                        switch (faultType)
-                        {
-                            case Lab07_08.Faults.AF:
-                            {
-                                WriteAf(memory, value, mode, i, j);
-
-                                break;
-                            }
-
-                            case Lab07_08.Faults.SAF:
-                            {
-                                WriteSaf(memory, value, i, j);
-
-                                break;
-                            }
-                            case Lab07_08.Faults.CFin:
-                            {
-                                WriteCfin(memory, value, i, j, mode);
-
-                                break;
-                            }
-                            case Lab07_08.Faults.CFid:
-                            {
-                                WriteCfid(memory, value, i, j, mode);
-
-                                break;
-                            }
-                        }
-                    }
-                }
+                memory[i, j - 1] = value;
             }
+            else if (GetNumberOfFault(Faults, i, j + 1) != -1)
+            {
+                memory[i, j + 1] = value;
+            }
+
+            memory[i, j] = value;
+        }
+
+        private void WritePnpsfk9(Memory memory, int value, int i, int j)
+        {
+            if (GetNumberOfFault(Faults, i, j) != -1)
+            {
+                if (!(memory[i - 1, j - 1] == 1 && memory[i, j - 1] == 1 && memory[i + 1, j - 1] == 0 &&
+                          memory[i - 1, j] == 1 &&                              memory[i + 1, j] == 0 &&
+                      memory[i - 1, j + 1] == 1 &&  memory[i, j+ 1] == 0 && memory[i + 1, j + 1] == 0))
+                {
+                    memory[i, j] = value;
+
+                    return;
+                }
+
+                return;
+            }
+
+            memory[i, j] = value;
         }
 
         private void WriteCfid(Memory memory, int value, int i, int j, FaultsMode mode)
@@ -371,7 +420,7 @@
                 {
                     memory[i, j] = value;
 
-                    memory[i, j - 1] = value;
+                    memory[i, j - 1] = 1;
                 }
             }
             else
@@ -383,50 +432,6 @@
         private int ReadSingle(Memory memory, int i, int j)
         {
             return memory[i, j];
-        }
-
-        private void ReadAll(Memory memory, int correctValue, bool direction)
-        {
-            if (direction)
-            {
-                for (var i = 0; i < memory.Width; i++)
-                {
-                    for (var j = 0; j < memory.Height; j++)
-                    {
-                        var currentSell = memory[i, j];
-
-                        if (currentSell != correctValue)
-                        {
-                            if (GetNumberOfFault(CoveredFaults, i, j) == -1)
-                            {
-                                var fault = new List<int> {i, j};
-
-                                CoveredFaults.Add(fault);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                for (var i = memory.Width - 1; i >= 0; i--)
-                {
-                    for (var j = memory.Height - 1; j >= 0; j--)
-                    {
-                        var currentSell = memory[i, j];
-
-                        if (currentSell != correctValue)
-                        {
-                            if (GetNumberOfFault(CoveredFaults, i, j) == -1)
-                            {
-                                var fault = new List<int> {i, j};
-
-                                CoveredFaults.Add(fault);
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
